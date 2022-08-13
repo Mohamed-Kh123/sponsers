@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\SponsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-Route::resource('/sponsers', SponsersController::class);
+Route::resource('admin/sponsers', SponsersController::class)->middleware('auth');
+Route::post('/admin/search', [SearchController::class, 'search'])->middleware('auth');
+Route::get('/admin/search', [SearchController::class, 'search'])->middleware('auth')->name('search');
 Route::get('/get_cities', [SponsersController::class, 'getCities']);

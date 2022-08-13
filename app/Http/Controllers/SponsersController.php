@@ -19,7 +19,7 @@ class SponsersController extends Controller
     public function index()
     {
         $sponsers = Sponser::with('country')->with('city')->paginate();
-        return view('sponser.index', [
+        return view('admin.sponser.index', [
             'sponsers' => $sponsers,
         ]);
     }
@@ -33,7 +33,7 @@ class SponsersController extends Controller
     {
         $countries = Country::all();
         $cities = City::all();
-        return view('sponser.create', [
+        return view('admin.sponser.create', [
 
             'sponser' => new Sponser(),
             'countries' => $countries,
@@ -68,7 +68,7 @@ class SponsersController extends Controller
                 'identifier' => 'required|digits:10',
                 'address' => 'required',
             ]);
-            $name = $request->first_name . ' ' . $request->secound_name . ' ' . $request->third_name . ' ' . $request->family_name;
+            $name = $request->first_name . ' ' . $request->second_name . ' ' . $request->third_name . ' ' . $request->family_name;
             $country = $request->country_id;
             $city = $request->city_id;
             $telephone = $request->telephone;
@@ -142,7 +142,7 @@ class SponsersController extends Controller
     public function show($id)
     {
         $sponser = Sponser::findOrFail($id);
-        return view('sponser.show', [
+        return view('admin.sponser.show', [
             'sponser' => $sponser,
         ]);
     }
@@ -155,7 +155,7 @@ class SponsersController extends Controller
      */
     public function edit($id)
     {
-        return view('sponser.edit', [
+        return view('admin.sponser.edit', [
             'sponser' => Sponser::findOrFail($id),
             'countries' => Country::all(),
         ]);
@@ -188,7 +188,7 @@ class SponsersController extends Controller
                 'identifier' => 'required|digits:10',
                 'address' => 'required',
             ]);
-            $name = $request->first_name . ' ' . $request->secound_name . ' ' . $request->third_name . ' ' . $request->family_name;
+            $name = $request->first_name . ' ' . $request->second_name . ' ' . $request->third_name . ' ' . $request->family_name;
             $country = $request->country_id;
             $city = $request->city_id;
             $telephone = $request->telephone;
