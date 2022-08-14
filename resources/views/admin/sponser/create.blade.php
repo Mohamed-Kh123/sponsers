@@ -17,6 +17,7 @@
     <title>بيانات الكفيل</title>
     <link rel="stylesheet" href="">
   </head>
+
   <body>
     <fieldset style="width: 71%">
       <legend>بيانات الكفيل</legend>
@@ -60,7 +61,7 @@
         </select>
         <label for="" style="margin-right: 15px">المدينة</label>
         <select name="city_id" id="city" class="form-control @error('city_id') is-invalid @enderror" >
-          
+          <option value="">...</option>
         </select>
 
       </div>
@@ -93,7 +94,9 @@
         <label for="">الجنسية</label>
         <select name="nationality" id="nationality" class="form-control @error('nationality') is-invalid @enderror" >
           <option value="">...</option>
-          <option value="فلسطيني" @if($sponser->nationality == 'فلسطيني') selected @endif>فلسطين</option>
+          @foreach($countries as $country)
+          <option value="{{$country->name}}">{{$country->name}}</option>
+          @endforeach
         </select>
       </div>
   <button>حفظ</button>
@@ -133,7 +136,7 @@
 
         </div><br><br>
         <label for="">البريد</label>
-        <input type="text" name="email" id="" class="form-controll @error('email') is-invalid @enderror" value="{{old('email', $sponser->email)}}">
+        <input type="text" name="email"  id="" class="form-controll @error('email') is-invalid @enderror" value="{{old('email', $sponser->email)}}">
 
     </div>    
 
@@ -141,7 +144,7 @@
   </form>
 
 </fieldset>
-<a href="/search/search.html" style="margin-right: 450px;">البحث عن كفلاء</a>
+<a href="{{route('search.index')}}" style="margin-right: 450px;">البحث عن كفلاء</a>
 </body>
 </html>
 
@@ -157,14 +160,25 @@
             $('#form1').css('display', 'none');
             $('#form2').css('display', 'block');
         }
+        else{
+          $('#form1').css('display', 'block');
+          $('#form2').css('display', 'none');
+        }
     }); 
 
 
     $(document).ready(function () {
       $("#country").change(function(){
+        $('#city').children().remove()
+        $('#city').append(new Option('...', '...'))
         let country_id = this.value;
         $.get(`/get_cities?country=${country_id}`, function(data){
-          $('#city').html(data);
+          for (i in data){
+            items = data[i];
+            $('#city').append(`
+            <option value="${items.id}">${items.name}</option>  
+            `);
+          }
         })
       })
     });

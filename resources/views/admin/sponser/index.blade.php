@@ -1,4 +1,23 @@
 @extends('layouts.admin')
+
+
+@section('title')
+<div class="d-flex justify-content-between">
+    <h2>Sponsers</h2>
+    <div class="">
+        <a class="btn btn-sm btn-outline-primary" href="{{ route('sponsers.create') }}">Create</a>
+    </div>
+</div>
+@endsection
+
+@section('breadcrumb')
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{{route('sponsers.index')}}">Sponsers</a></li>
+</ol>
+@endsection
+
+
 @section('content')
 
 <table class="table">

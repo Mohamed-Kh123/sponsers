@@ -27,6 +27,6 @@ require __DIR__.'/auth.php';
 
 
 Route::resource('admin/sponsers', SponsersController::class)->middleware('auth');
-Route::post('/admin/search', [SearchController::class, 'search'])->middleware('auth');
-Route::get('/admin/search', [SearchController::class, 'search'])->middleware('auth')->name('search');
+Route::get('admin/search', [SearchController::class, 'index'])->middleware('auth')->name('search.index');
+Route::get('admin/search/results', [SearchController::class, 'search'])->middleware('auth')->name('search.results');
 Route::get('/get_cities', [SponsersController::class, 'getCities']);

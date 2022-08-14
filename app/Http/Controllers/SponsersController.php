@@ -158,6 +158,7 @@ class SponsersController extends Controller
         return view('admin.sponser.edit', [
             'sponser' => Sponser::findOrFail($id),
             'countries' => Country::all(),
+            'cities' => City::all(),
         ]);
     }
 
@@ -268,10 +269,7 @@ class SponsersController extends Controller
     {
         $country_id = request('country');
         $cities = City::where('country_id', $country_id)->get();
-        foreach($cities as $city){
-            $option = "<option value=". $city->id .">$city->name</option>";
-        }
-        return $option;
+        return $cities;
     }
 
 }

@@ -16,23 +16,23 @@
         margin-top: 10px;
       "
     >
+    
+    <form action="{{route('search.results')}}" method="get">
       <legend>البحث عن كفيل</legend>
-      <input type="radio" name="rad" id="radio1" />
+      <input type="radio" name="type" id="radio1" value="personal"  />
       <label for="">شخصي</label>
-      <input type="radio" name="rad" id="radio1" />
+      <input type="radio" name="type" id="radio1" value="institution" checked />
       <label for="">مؤسسة</label>
-
-      <form action="{{route('search')}}" method="get">
         <table width="520" height="250">
           <tr>
             <td>الاسم</td>
-            <td colspan="3"><input type="text" name="name" /></td>
+            <td colspan="3"><input type="text" name="name"/></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
             <td>الدولة</td>
-            <td colspan="1">
+            <td>
               <select name="country_id" id="country">
                 <option value="">...</option>
                 @foreach($countries as $country)
@@ -40,13 +40,20 @@
                 @endforeach
               </select>
             </td>
+            <td id="responsible_name_lable">مسؤول الاتصال</td>
+            <td><input type="text" name="responsible_name" id="responsible_name" /></td>
+          </tr>
+          <tr>
+            
           </tr>
           <tr>
             <td>الجنسية</td>
             <td>
               <select name="nationality" id="">
                 <option value="">...</option>
-                <option value="فلسطين" @if($sponser->nationality == 'فلسطين') selected @endif>فلسطين</option>
+                @foreach($countries as $country)
+                <option value="{{$country->name}}">{{$country->name}}</option>
+                @endforeach
               </select>
             </td>
             <td>المدينة</td>
@@ -63,52 +70,20 @@
             <td></td>
           </tr>
         </table>
+        <button
+          type="submit"
+          style="
+            width: 200px;
+            height: 30px;
+            font-size: 20px;
+            margin: 15px 400px 15px 0px;
+          "
+        >
+          بحث
+        </button>
       </form>
     </fieldset>
-    <button
-      style="
-        width: 200px;
-        height: 30px;
-        font-size: 20px;
-        margin: 15px 400px 15px 0px;
-      "
-    >
-      بحث
-    </button>
-    <section>
-      <table class="result">
-        <th>#</th>
-        <th>الاسم</th>
-        <th>النوع</th>
-        <th>الدولة</th>
-        <th>المدينة</th>
-        <th>رقم الهاتف</th>
-        <th>عدد المستفيدين</th>
-        <th>عمليات</th>
-        <tr>
-          <td>{{$sponser->id}}</td>
-          <td>{{$sponser->name}}</td>
-          <td>#</td>
-          <td>{{$sponser->country->name}}</td>
-          <td>{{$sponser->city}}</td>
-          <td>{{$sponser->telephone}}</td>
-          <td>#</td>
-          <td>
-            <button>ادارة</button
-            ><button style="background-color: gold; width: 120px">
-              Send SMS
-            </button>
-          </td>
-        </tr>
-        <tr style="text-align: right">
-          <td colspan="8" style="padding-right: 15px">
-            <a href="#">الاول</a> <a href="#">|السابق</a>
-            <a href="#">|التالي</a> <a href="#">|الأخير</a>
-          </td>
-        </tr>
-      </table>
-    </section>
-    <a href="/index.html" style="font-size: 22px; margin: 0px 500px 0px;">رجوع</a>
+    <a href="{{route('search.index')}}" style="font-size: 22px; margin: 0px 500px 0px;">رجوع</a>
   </body>
 </html>
 
@@ -117,16 +92,34 @@
 <script>
 
 
-
-
-    $(document).ready(function () {
-        $("#country").change(function(){
-            let country_id = this.value;
-            $.get(`/get_cities?country=${country_id}`, function(data){
-            $('#city').html(data);
-            })
+  $(document).ready(function () {
+      $("#country").change(function(){
+        $('#city').children().remove()
+        $('#city').append(new Option('...', '...'))
+        let country_id = this.value;
+        $.get(`/get_cities?country=${country_id}`, function(data){
+          for (i in data){
+            items = data[i];
+            $('#city').append(`
+            <option value="">...</option>  
+            <option value="${items.id}">${items.name}</option>  
+            `);
+          }
         })
+      })
     });
 
+
+  $(document).ready(function (){
+    $('input:radio[name="type"]').change(function () {
+      if($('#radio1').is(":checked")){
+        $('#responsible_name').hide();
+        $('#responsible_name_lable').hide();
+      }else{
+        $('#responsible_name').show();
+        $('#responsible_name_lable').show();
+      }
+    })
+  });
 
 </script>

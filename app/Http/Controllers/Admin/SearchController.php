@@ -11,32 +11,85 @@ use Illuminate\Http\Request;
 class SearchController extends Controller
 {
 
+  public function index()
+  {
+    return view('admin.search', [
+      'countries' => Country::all(),
+    ]);
+  }
 
-    public function search(Request $request)
-    {
-            $countries = Country::all();
 
-            $search_name = request()->query('name');
-            $search_identifier = request()->query('identifier');
-            $search_country = request()->query('country_id');
-            $search_city = request()->query('city_id');
-            $search_nationality = request()->query('nationality');
+  public function search(Request $request)
+  { 
+    $name = $request['name'];
+    $identifier = $request['identifier'];
+    $country = $request['country_id'];
+    $city = $request['city_id'];
+    $nationality = $request['nationality'];
+    $type =  $request['type'];
+    $responsible_name = $request['responsible_name'];
     
-            if($search_city && $search_country && $search_identifier && $search_name && $search_nationality){
+    
+    if ($request->type == 'personal') {
+      $sponsers = new Sponser();
 
-                $sponser = Sponser::with('country')->where('name', 'LIKE', '%'.$search_name.'%')
-                ->where('identifier', 'LIKE', '%'.$search_identifier.'%')
-                ->where('country_id', 'LIKE', '%'.$search_country.'%')
-                ->where('city_id', 'LIKE', '%'.$search_city.'%')
-                ->where('nationality', 'LIKE', '%'.$search_nationality.'%')
-                ->get();
-                
-            }
-            
-            return view('admin.search', [
-                'countries' => $countries,
-                'sponser' => $sponser,
-            ]);
+        if($type){
+          $sponsers = $sponsers->where('type', '=', 'personal');
         }
-}
 
+        if($name){
+          $sponsers = $sponsers->where('name', 'like', "%$name%");
+        }
+
+        if($country){
+          $sponsers = $sponsers->where('country_id', '=', $country);
+        }
+
+        if($city){
+          $sponsers = $sponsers->where('city_id', '=', $city);
+        }
+
+        if($nationality){
+          $sponsers = $sponsers->where('nationality', '=', $nationality);
+        }
+
+        if($identifier){
+          $sponsers = $sponsers->where('identifier', '=', $identifier);
+        }
+
+        $sponsers = $sponsers->get();
+        
+
+      return view('admin.results', compact('sponsers'));
+    }elseif($request->type == 'institution'){
+      $sponsers = new Sponser();
+
+      if($type){
+        $sponsers = $sponsers->where('type', '=', 'institution');
+      }
+
+      if($name){
+        $sponsers = $sponsers->where('name', 'like', "%$name%");
+      }
+
+      if($country){
+        $sponsers = $sponsers->where('country_id', '=', $country);
+      }
+
+      if($responsible_name){
+        $sponsers = $sponsers->where('responsible_name', '=', $responsible_name);
+      }
+
+      $sponsers = $sponsers->get();
+
+      return view('admin.results', compact('sponsers'));
+    }
+  }
+
+  public function getCities()
+  {
+    $country_id = request('country');
+    $cities = City::where('country_id', $country_id)->get();
+    return $cities;
+  }
+}
