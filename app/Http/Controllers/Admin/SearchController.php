@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Beneficiaries;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Sponser;
@@ -13,13 +14,13 @@ class SearchController extends Controller
 
   public function index()
   {
-    return view('admin.search', [
+    return view('admin.sponser.search', [
       'countries' => Country::all(),
     ]);
   }
 
 
-  public function search(Request $request)
+  public function searchSponsers(Request $request)
   { 
     $name = $request['name'];
     $identifier = $request['identifier'];
@@ -60,7 +61,7 @@ class SearchController extends Controller
         $sponsers = $sponsers->get();
         
 
-      return view('admin.results', compact('sponsers'));
+      return view('admin.sponser.results', compact('sponsers'));
     }elseif($request->type == 'institution'){
       $sponsers = new Sponser();
 
@@ -82,8 +83,32 @@ class SearchController extends Controller
 
       $sponsers = $sponsers->get();
 
-      return view('admin.results', compact('sponsers'));
+      return view('admin.sponser.results', compact('sponsers'));
     }
+  }
+
+  public function searchBeneficiary(Request $request)
+  {
+    
+    $beneficiaries = new Beneficiaries();
+
+    $name = $request['name'];
+    $type = $request['type'];
+    $sponser_id = $request['sponser_id'];
+
+    if($name){
+      $beneficiaries = $beneficiaries->where('name', '=', $name);
+    }
+
+    if($type){
+      $beneficiaries = $beneficiaries->where('type', '=', $beneficiaries);
+    }
+
+    if($sponser_id){
+      $beneficiaries = $beneficiaries->where('sponser_id', '=', $sponser_id);
+    }
+
+    
   }
 
   public function getCities()

@@ -23,4 +23,8 @@ class Sponser extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+    public function beneficiaries()
+    {
+        return $this->hasMany(Beneficiaries::class, 'sponser_id');
+    }
 }
