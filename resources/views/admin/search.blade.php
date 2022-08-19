@@ -101,7 +101,6 @@
           for (i in data){
             items = data[i];
             $('#city').append(`
-            <option value="">...</option>  
             <option value="${items.id}">${items.name}</option>  
             `);
           }

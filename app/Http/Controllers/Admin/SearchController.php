@@ -14,7 +14,7 @@ class SearchController extends Controller
 
   public function index()
   {
-    return view('admin.sponser.search', [
+    return view('admin.search', [
       'countries' => Country::all(),
     ]);
   }
@@ -61,7 +61,7 @@ class SearchController extends Controller
         $sponsers = $sponsers->get();
         
 
-      return view('admin.sponser.results', compact('sponsers'));
+      return view('admin.results', compact('sponsers'));
     }elseif($request->type == 'institution'){
       $sponsers = new Sponser();
 
@@ -83,7 +83,7 @@ class SearchController extends Controller
 
       $sponsers = $sponsers->get();
 
-      return view('admin.sponser.results', compact('sponsers'));
+      return view('admin.results', compact('sponsers'));
     }
   }
 

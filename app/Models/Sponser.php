@@ -15,16 +15,34 @@ class Sponser extends Model
         'telephone', 'nationality', 'ident_type', 'identifier','phone','address', 'type'
     ];
 
+    // protected $hidden = [
+    //     'phone2', 'password', 'responsible_name','city_id',
+    //     'telephone', 'nationality', 'ident_type', 'identifier', 'created_at', 'updated_at'
+    // ];
+    // protected $appends = [
+    //     'country_name'
+    // ];
+
+    
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_id');
+        return $this->belongsTo(Country::class);
     }
+    
+    // public function getCountryNameAttribute()
+    // {
+    //     return $this->country;
+    // }
+
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+
     public function beneficiaries()
     {
         return $this->hasMany(Beneficiaries::class, 'sponser_id');
     }
+
+
 }

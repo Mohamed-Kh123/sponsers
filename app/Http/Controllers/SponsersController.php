@@ -18,6 +18,8 @@ class SponsersController extends Controller
      */
     public function index()
     {
+        // Get all the sponsers
+
         $sponsers = Sponser::with('country')->with('city')->paginate();
         return view('admin.sponser.index', [
             'sponsers' => $sponsers,
@@ -41,7 +43,7 @@ class SponsersController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -51,7 +53,9 @@ class SponsersController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->type == 'personal'){
+        // Create A Personal Sponser
+
+        if ($request->type == 'personal') {
             $request->validate([
                 'first_name' => 'required|string|max:50',
                 'second_name' => 'required|string|max:50',
@@ -79,26 +83,27 @@ class SponsersController extends Controller
             $ident_type = $request->ident_type;
             $phone = $request->phone;
             $type = $request->type;
-            
-            
+
+
             Sponser::insert([
-                'name' =>$name, 
-                'country_id' =>$country,
-                'city_id' =>$city, 
-                'nationality' =>$nationality, 
-                'telephone' =>$telephone, 
-                'address' =>$address, 
-                'email' =>$email, 
-                'phone' =>$phone, 
-                'ident_type' =>$ident_type, 
-                'identifier' =>$identifier,
+                'name' => $name,
+                'country_id' => $country,
+                'city_id' => $city,
+                'nationality' => $nationality,
+                'telephone' => $telephone,
+                'address' => $address,
+                'email' => $email,
+                'phone' => $phone,
+                'ident_type' => $ident_type,
+                'identifier' => $identifier,
                 'type' => $type,
             ]);
             return redirect()->route('sponsers.index')->with('success', 'Sponser Added Successfully!');
-        }
-        elseif($request->type == 'institution'){
+
+            // Create An Institution Sponser
+        } elseif ($request->type == 'institution') {
             $request->validate([
-                'name' => 'required|string|max:100', 
+                'name' => 'required|string|max:100',
                 'address' => 'required|max:255',
                 'responsible_name' => 'required|string|max:100',
                 'phone' => 'required|size:13',
@@ -129,7 +134,7 @@ class SponsersController extends Controller
                 'type' => $type,
             ]);
 
-            return redirect()->route('sponsers.index')->with('success', 'Sponser Added Successfully!');         
+            return redirect()->route('sponsers.index')->with('success', 'Sponser Added Successfully!');
         }
     }
 
@@ -172,7 +177,11 @@ class SponsersController extends Controller
     public function update(Request $request, $id)
     {
         $sponser = Sponser::findOrFail($id);
-        if($request->type == 'personal'){
+
+        // Update A Personal Sponser
+
+
+        if ($request->type == 'personal') {
             $request->validate([
                 'first_name' => 'required|string|max:50',
                 'second_name' => 'required|string|max:50',
@@ -184,7 +193,7 @@ class SponsersController extends Controller
                 'telephone' => 'required|integer|digits:7',
                 'phone' => 'required|string|min:13|max:13',
                 'nationality' => 'required',
-                'email' => 'required|email|unique:sponsers,email,'.$id,
+                'email' => 'required|email|unique:sponsers,email,' . $id,
                 'ident_type' => 'required|in:identification,passport',
                 'identifier' => 'required|digits:10',
                 'address' => 'required',
@@ -200,31 +209,32 @@ class SponsersController extends Controller
             $ident_type = $request->ident_type;
             $phone = $request->phone;
             $type = $request->type;
-            
-            
-           $sponser->name = $name;
-           $sponser->country_id = $country;
-           $sponser->city_id = $city;
-           $sponser->telephone = $telephone;
-           $sponser->identifier = $identifier;
-           $sponser->address = $address;
-           $sponser->email = $email;
-           $sponser->nationality = $nationality;
-           $sponser->ident_type = $ident_type;
-           $sponser->phone = $phone;
-           $sponser->type = $type;
-           $sponser->save();
+
+
+            $sponser->name = $name;
+            $sponser->country_id = $country;
+            $sponser->city_id = $city;
+            $sponser->telephone = $telephone;
+            $sponser->identifier = $identifier;
+            $sponser->address = $address;
+            $sponser->email = $email;
+            $sponser->nationality = $nationality;
+            $sponser->ident_type = $ident_type;
+            $sponser->phone = $phone;
+            $sponser->type = $type;
+            $sponser->save();
             return redirect()->route('sponsers.index')->with('success', 'Sponser Added Successfully!');
-        }
-        elseif($request->type == 'institution'){
+
+            // Update An Institution Sponser
+        } elseif ($request->type == 'institution') {
             $request->validate([
-                'name' => 'required|string|max:100', 
+                'name' => 'required|string|max:100',
                 'address' => 'required|max:255',
                 'responsible_name' => 'required|string|max:100',
                 'phone' => 'required|size:13',
                 'type' => 'required|in:personal,institution',
                 'phone2' => 'required|size:13',
-                'email' => 'required|email|unique:sponsers,email,'.$id,
+                'email' => 'required|email|unique:sponsers,email,' . $id,
                 'country_id' => 'required|exists:countries,id',
             ]);
 
@@ -249,7 +259,7 @@ class SponsersController extends Controller
 
             $sponser->save();
 
-            return redirect()->route('sponsers.index')->with('success', 'Sponser Updated Successfully!');         
+            return redirect()->route('sponsers.index')->with('success', 'Sponser Updated Successfully!');
         }
     }
 
@@ -267,9 +277,10 @@ class SponsersController extends Controller
 
     public function getCities()
     {
+        // Get All The Cities That Belong To A Specific Country
+
         $country_id = request('country');
         $cities = City::where('country_id', $country_id)->get();
         return $cities;
     }
-
 }

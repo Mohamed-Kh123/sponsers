@@ -68,7 +68,7 @@
         <select name="city_id" id="city" class="form-control @error('city') is-invalid @enderror" >
             <option value="">...</option>
             @foreach($cities as $city)
-            <option value="{{$city->id}}" @if($city->id == old('city_id', $sponser->city->id)) selected @endif>{{$city->name}}</option>
+            <option value="{{$city->id}}"@if($city->id == old('city_id', $sponser->city->id)) selected @endif>{{$city->name}}</option>
             @endforeach
         </select>
         

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\BeneficiariesController;
 use App\Http\Controllers\SponsersController;
+use App\Models\Sponser;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
@@ -44,4 +45,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::put('beneficiaries/{id}/update', [BeneficiariesController::class, 'update'])->name('beneficiary.update');
     Route::delete('beneficiaries/{id}', [BeneficiariesController::class, 'destroy'])->name('beneficiary.destroy');
     Route::get('search/results', [SearchController::class, 'search'])->name('search.results');
+});
+
+Route::get('/country', function(){
+    return Sponser::findOrFail(2)->country;
 });

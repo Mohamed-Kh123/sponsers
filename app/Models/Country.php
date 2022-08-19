@@ -14,7 +14,7 @@ class Country extends Model
 
     public function sponsers()
     {
-        return $this->hasMany(Sponser::class, 'country_id');
+        return $this->hasMany(Sponser::class);
     }
 
     public function cities()
