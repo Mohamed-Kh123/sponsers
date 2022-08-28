@@ -7,6 +7,8 @@ use App\Models\Sponser;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Nationality;
+use App\Models\User;
+use App\Notifications\SponserCreatedNotification;
 use Illuminate\Support\Facades\DB;
 
 class SponsersController extends Controller
@@ -19,6 +21,8 @@ class SponsersController extends Controller
     public function index()
     {
         // Get all the sponsers
+        $user = User::find(1)->notify(new SponserCreatedNotification(new Sponser()));
+        return dd($user);
 
         $sponsers = Sponser::with('country')->with('city')->paginate();
         return view('admin.sponser.index', [

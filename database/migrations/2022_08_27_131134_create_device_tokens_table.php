@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('beneficiaries', function (Blueprint $table) {
+        Schema::create('device_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type', ['سنوي', 'شهري']);
-            $table->foreignId('sponser_id')->constrained('sponsers')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('token')->unique();
+            $table->string('type')->default('fcm');
+            $table->string('device');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('beneficiaries');
+        Schema::dropIfExists('device_tokens');
     }
 };

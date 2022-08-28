@@ -273,5 +273,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('assets/sponsers/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('assets/sponsers/js/adminlte.min.js')}}"></script>
+<script type="module" src={{'resources/js/firebase.js'}}></script>
+<script src="{{asset('assets/sponsers/baba.js')}}"></script>
+
 </body>
 </html>

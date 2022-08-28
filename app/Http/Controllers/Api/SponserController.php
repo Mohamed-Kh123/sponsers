@@ -16,6 +16,7 @@ class SponserController extends Controller
      */
     public function index(Request $request)
     {
+        // Showing all the sponsers
 
         $sponsers = Sponser::with('country')->select('name', 'country_id', 'address', 'type', 'phone', 'email')->get();
 
@@ -30,6 +31,14 @@ class SponserController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!$request->user()->tokenCan('sponsers.create')){
+            abort(403, 'Not allowed!');
+        }
+
+
+        // creating a personal sponser
+
         if ($request->type == 'personal') {
 
             $request->validate([
@@ -80,6 +89,8 @@ class SponserController extends Controller
             return Response::json($sponser, 201);
         }
 
+        // creating a institution sponser
+
         if ($request->type == 'institution') {
             $request->validate([
                 'name' => 'required|string|max:100',
@@ -126,6 +137,9 @@ class SponserController extends Controller
     public function show($id)
     {
         $sponser = Sponser::findOrFail($id);
+
+        // showing a pesonal sponser 
+
         if ($sponser->type == 'personal') {
             return Response::json([
                 'name' => $sponser->name,
@@ -139,6 +153,8 @@ class SponserController extends Controller
                 'address' => $sponser->address,
             ], 200);
         }
+
+        // showing an institution sponser 
 
         if ($sponser->type == 'institution') {
             return Response::json([
@@ -164,7 +180,10 @@ class SponserController extends Controller
     {
         $sponser = Sponser::findOrFail($id);
 
+        // update pesonal sponser
+
         if ($sponser->type == 'personal') {
+            
             $request->validate([
                 'first_name' => 'sometimes|required|string|max:50',
                 'second_name' => 'sometimes|required|string|max:50',
@@ -240,6 +259,8 @@ class SponserController extends Controller
             ]);
         }
 
+        // update institution sponser
+
         if ($sponser->type == 'institution') {
 
             $sponser = Sponser::findOrFail($id);
@@ -307,6 +328,8 @@ class SponserController extends Controller
      */
     public function destroy($id)
     {
+        // delete sponser 
+
         $sponser = Sponser::findOrFail($id);
         $sponser->delete();
 
